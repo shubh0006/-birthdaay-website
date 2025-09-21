@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Happy Birthday 🎂</title>
+  <style>
+    /* ========= Reset & base ========= */
+    * { box-sizing: border-box; }
+    html,body { height: 100%; margin:0; font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+    body {
+      background: linear-gradient(135deg,#ffecd2 0%, #fcb69f 100%);
+      color:#222;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      overflow-x:hidden;
+    }
+    .container { max-width:1100px; margin:0 auto; padding:24px; }
+
+    /* ========= Header / greeting ========= */
+    header { text-align:center; position:relative; padding-top:24px; }
+    h1 { font-size:2.6rem; margin:10px 0; color:#5c0b46; letter-spacing:0.5px; }
+    p.lead { margin:0 0 12px 0; color:#6b2a4a; font-size:1.05rem; }
+
+    /* Play music button */
+    .controls { display:flex; gap:12px; justify-content:center; margin:12px 0 24px; }
+    .btn {
+      background:#ff6f91; color:white; border:none; padding:10px 16px; border-radius:999px;
+      cursor:pointer; font-weight:600; box-shadow:0 6px 18px rgba(0,0,0,0.12);
+    }
+    .btn.secondary { background:#ffd166; color:#3b2f2f; }
+
+    /* ========= Balloons ========= */
+    .balloon {
+      width:64px; height:86px; position:absolute; bottom:-200px;
+      border-radius:50% 50% 45% 45% / 60% 60% 40% 40%;
+      transform-origin:center bottom;
+      animation:floatUp linear infinite;
+      box-shadow:0 6px 18px rgba(0,0,0,0.12);
+    }
+    .balloon::after {
+      content:''; position:absolute; left:50%; bottom:-18px; transform:translateX(-50%);
+      width:2px; height:24px; background:rgba(0,0,0,0.12);
+    }
+    .b1 { left:6%; background:#ff6f91; animation-duration:8s; animation-delay:0s; }
+    .b2 { left:26%; background:#ff9671; animation-duration:9s; animation-delay:1s; }
+    .b3 { left:50%; background:#ffc75f; animation-duration:10s; animation-delay:0.5s; }
+    .b4 { left:74%; background:#7bed9f; animation-duration:11s; animation-delay:0.9s; }
+    @keyframes floatUp {
+      0% { transform:translateY(0) rotate(-4deg); opacity:1; }
+      50% { transform:translateY(-10vh) rotate(4deg); opacity:0.95; }
+      100% { transform:translateY(-120vh) rotate(-4deg); opacity:0; }
+    }
+
+    /* ========= Surprise card ========= */
+    .card-wrap { display:flex; justify-content:center; margin:22px 0; }
+    .card {
+      width:320px; height:200px; perspective:1200px;
+    }
+    .card-inner {
+      width:100%; height:100%;
+       transition:transform 0.8s; transform-style:preserve-3d; cursor:pointer;
+      border-radius:14px; position:relative;
+    }
+    .card-front, .card-back {
+      position:absolute; inset:0; backface-visibility:hidden; border-radius:14px;
+      display:flex; align-items:center; justify-content:center; padding:18px; box-shadow:0 10px 30px rgba(0,0,0,0.12);
+    }
+    .card-front { background:linear-gradient(180deg,#ff9a9e,#fecfef); color:white; font-weight:700; font-size:1.2rem; }
+    .card-back { background:linear-gradient(180deg,#ffd166,#ff6f91); transform:rotateY(180deg); color:#3b2f2f; font-size:1rem; }
+
+    .card.open .card-inner { transform: rotateY(180deg); }
+
+    /* ========= Slideshow ========= */
+    .slideshow { margin-top:14px; display:grid; place-items:center; }
+    .slides {
+      width:90%; max-width:820px; height:920px; border-radius:14px; overflow:hidden; position:relative;
+      box-shadow:0 18px 40px rgba(0,0,0,0.14);
+      background:linear-gradient(180deg,#fff,#fff);
+    }
+    .slides img { width:100%; height:100%; object-fit:cover; display:block; }
+    .slide-btns {
+      position:absolute; top:50%; transform:translateY(-50%); width:100%; display:flex; justify-content:space-between;
+      pointer-events:none;
+    }
+    .slide-btn {
+      pointer-events:all;
+      background:rgba(0,0,0,0.35); color:white; border:none; width:44px; height:44px; border-radius:50%;
+      display:grid; place-items:center; margin:0 8px; cursor:pointer;
+    }
+    .dots { display:flex; gap:8px; justify-content:center; margin:12px 0 0; }
+    .dot {
+      width:10px; height:10px; border-radius:50%; background:rgba(0,0,0,0.2); cursor:pointer;
+    }
+    .dot.active { background:#ff6f91; box-shadow:0 4px 10px rgba(0,0,0,0.12); }
+
+    /* ========= Timeline ========= */
+    .timeline { margin:32px 0 80px; display:grid; gap:16px; }
+    .time-item { background:rgba(255,255,255,0.95); border-radius:12px; padding:12px; display:flex; gap:12px; align-items:center; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+    .time-item img { width:76px; height:100px; object-fit:cover; border-radius:8px; flex-shrink:0; }
+    .time-item .meta { font-size:0.95rem; color:#333; }
+    .time-item h4 { margin:0 0 6px 0; color:#5c0b46; font-size:1.02rem; }
+    .time-item p { margin:0; color:#4b3a46; opacity:0.9; font-size:0.92rem; }
+
+    /* ========= Timeline Zoom Overlay ========= */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 9999;
+    }
+    .overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .overlay-content {
+      background: white;
+      color: #333;
+      padding: 30px;
+      border-radius: 14px;
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+      transform: scale(0.8);
+      transition: transform 0.4s ease;
+      animation: fadeInUp 0.5s forwards;
+    }
+    .overlay.active .overlay-content {
+      transform: scale(1);
+    }
+    .overlay .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+    }
+    @keyframes fadeInUp {
+      0% { opacity:0; transform: translateY(30px) scale(0.8);}
+      100% { opacity:1; transform: translateY(0) scale(1);}
+    }
+    .time-item.clickable { cursor: pointer; transition: transform 0.3s; }
+    .time-item.clickable:hover { transform: scale(1.03); box-shadow:0 10px 20px rgba(0,0,0,0.2); }
+
+    /* ========= Footer ========= */
+    footer { text-align:center; padding:18px 8px 42px; color:#5a4354; }
+
+    /* responsive tweaks */
+    @media (max-width:700px){
+      h1 { font-size:1.9rem; }
+      .slides { height:260px; }
+      .card { width:86%; }
+      .time-item img { width:84px; height:60px; }
+    }
+
+    /* small helper: hidden class */
+    .hidden { display:none !important; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎉 Happy Birthday, Sis! 🎂</h1>
+      <p class="lead">A little surprise website made with love — click the card and enjoy the photos & music!</p>
+
+      <div class="controls">
+        <button class="btn" id="playBtn">▶ Play Song</button>
+        <button class="btn secondary" id="confettiBtn">Throw Confetti 🎊</button>
+      </div>
+
+      <!-- decorative balloons -->
+      <div class="balloon b1" aria-hidden="true"></div>
+      <div class="balloon b2" aria-hidden="true"></div>
+      <div class="balloon b3" aria-hidden="true"></div>
+      <div class="balloon b4" aria-hidden="true"></div>
+    </header>
+
+    <!-- Surprise flip card -->
+    <section class="card-wrap">
+      <div class="card" id="surpriseCard" tabindex="0" role="button" aria-pressed="false">
+        <div class="card-inner">
+          <div class="card-front">
+            <div>Open your surprise card 🎁<br><small style="font-weight:500; opacity:0.9;">(click Here )</small></div>
+          </div>
+          <div class="card-back">
+            <div style="text-align:center;">
+              <div style="font-size:1.25rem; font-weight:800; margin-bottom:6px;">Happy Birthday, To My Cute Sister Shivani!</div>
+              <div style="font-size:0.95rem;">Wishing you a day full of smiles, cake, and wonderful memories. Love you 💖</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slideshow -->
+    <section class="slideshow">
+      <div style="display:flex; justify-content:center; gap:12px; align-items:center;">
+        <h2 style="margin:0; font-size:1.1rem; color:#5c0b46;">Photo Slideshow</h2>
+      </div>
+      <div class="slides" id="slides">
+        <img src="shivu1.jpg" alt="Sister photo 1" id="currentSlide">
+        <div class="slide-btns">
+          <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+            <button class="slide-btn" id="prevBtn">&lt;</button>
+            <button class="slide-btn" id="nextBtn">&gt;</button>
+          </div>
+        </div>
+      </div>
+      <div class="dots" id="dots"></div>
+    </section>
+    
+
+    <!-- Timeline -->
+    <section class="timeline">
+      <h2 style="color:#5c0b46; margin:6px 0 4px;">Timeline of Memories</h2>
+      <div class="time-item">
+        <img src="shivu.jpg" alt="Childhood memory">
+        <div class="meta">
+          <h4>Sweet & Loving</h4>
+          <p>"Happy Birthday to the most amazing sister ever! 🎉 Thank you for always being my partner in crime, my cheerleader, and my best friend. Wishing you a day as special and wonderful as you are! Love you tons! 💖"</p>
+        </div>
+      </div>
+      <div class="time-item">
+        <img src="shivu1.jpg" alt="School memory">
+        <div class="meta">
+          <h4>Fun & Playful</h4>
+          <p>"Happy Birthday, sis! 🎂 Another year older, wiser… and still my favorite troublemaker! 😉 May your day be full of laughter, cake, and all the fun you can handle!"</p>
+        </div>
+      </div>
+      <div class="time-item">
+        <img src="shivu3.jpg" alt="Family memory">
+        <div class="meta">
+          <h4>Short & Cute:</h4>
+          <p>"Happy Birthday, Sis! 🎉 You make life brighter just by being you. Have the best day ever!"</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      Made with ❤️ — Click the card, press Play, and enjoy the slideshow.
+    </footer>
+  </div>
+
+  <!-- audio -->
+  <audio id="song" src="Happy Birthday_files_music.mp3" preload="auto"></audio>
+  <!-- confetti canvas -->
+  <canvas id="confettiCanvas" class="hidden"></canvas>
+
+  <!-- timeline overlay -->
+  <div class="overlay" id="overlay">
+    <div class="overlay-content" id="overlayContent"></div>
+    <div class="close-btn" id="closeBtn">&times;</div>
+  </div>
+
+  <script>
+    /********* Surprise card toggle *********/
+    const card = document.getElementById('surpriseCard');
+    card.addEventListener('click', ()=> { card.classList.toggle('open'); launchConfetti(); });
+    card.addEventListener('keydown', (e) => { if(e.key==='Enter'||e.key===' ') { e.preventDefault(); card.click(); } });
+
+    /********* Audio controls *********/
+    const song = document.getElementById('song');
+    const playBtn = document.getElementById('playBtn');
+    let playing = false;
+    playBtn.addEventListener('click', () => {
+      if(!playing){ song.play().catch(()=>{}); playBtn.textContent='⏸ Pause Song'; }
+      else { song.pause(); playBtn.textContent='▶ Play Song'; }
+      playing=!playing;
+    });
+    song.addEventListener('ended',()=>{ playing=false; playBtn.textContent='▶ Play Song'; });
+
+    /********* Slideshow logic *********/
+    const images=['shivu78.jpg','shivu1.jpg','shivu2.jpg','shivu3.jpg','shivu4.jpg'];
+    let idx=0;
+    const imgEl=document.getElementById('currentSlide');
+    const dotsWrap=document.getElementById('dots');
+    const prevBtn=document.getElementById('prevBtn');
+    const nextBtn=document.getElementById('nextBtn');
+    let slideInterval=null;
+
+    function showSlide(i){ i=(i+images.length)%images.length; idx=i; imgEl.src=images[idx]; imgEl.alt=`Slide ${idx+1}`; Array.from(dotsWrap.children).forEach((d,n)=>d.classList.toggle('active',n===idx)); }
+    function nextSlide(){ showSlide(idx+1); }
+    function prevSlide(){ showSlide(idx-1); }
+    images.forEach((_,i)=>{ const d=document.createElement('div'); d.className='dot'+(i===0?' active':''); d.title='Show image '+(i+1); d.addEventListener('click',()=>showSlide(i)); dotsWrap.appendChild(d); });
+    showSlide(0);
+    function startAuto(){ slideInterval=setInterval(nextSlide,3000); }
+    function stopAuto(){ clearInterval(slideInterval); slideInterval=null; }
+    startAuto();
+    const slidesBox=document.getElementById('slides');
+    slidesBox.addEventListener('mouseenter', stopAuto);
+    slidesBox.addEventListener('mouseleave',()=>{ if(!slideInterval) startAuto(); });
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+
+    /********* Confetti *********/
+    const confettiCanvas=document.getElementById('confettiCanvas'); const ctx=confettiCanvas.getContext('2d'); let confettiPieces=[], confettiRunning=false; function resizeCanvas(){ confettiCanvas.width=innerWidth; confettiCanvas.height=innerHeight; } window.addEventListener('resize', resizeCanvas); resizeCanvas();
+    function random(min,max){ return Math.random()*(max-min)+min; }
+    function spawnConfetti(){ confettiPieces=[]; const count=80; for(let i=0;i<count;i++){ confettiPieces.push({x:random(0,confettiCanvas.width),y:random(-confettiCanvas.height,0),size:random(6,12),speed:random(1,4),rot:random(0,Math.PI*2),spin:random(-0.1,0.1),color:['#ff6f91','#ff9671','#ffc75f','#7bed9f','#9ad0f5'][Math.floor(random(0,5))]}); } }
+    function drawConfetti(){ ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height); confettiPieces.forEach(p=>{p.y+=p.speed;p.rot+=p.spin;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.color;ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*0.6);ctx.restore();}); confettiPieces=confettiPieces.filter(p=>p.y<confettiCanvas.height+60); if(confettiPieces.length===0) stopConfetti(); }
+    let confettiTimer=null;
+    function startConfetti(){ confettiCanvas.classList.remove('hidden'); confettiRunning=true; spawnConfetti(); confettiTimer=setInterval(drawConfetti,1000/60); }
+    function stopConfetti(){ if(confettiTimer){ clearInterval(confettiTimer); confettiTimer=null; } confettiRunning=false; setTimeout(()=>confettiCanvas.classList.add('hidden'),400); }
+    function launchConfetti(){ if(!confettiRunning) startConfetti(); }
+    document.getElementById('confettiBtn').addEventListener('click',()=>launchConfetti());
+    document.addEventListener('keydown',(e)=>{ if(e.key==='c'||e.key==='C') launchConfetti(); });
+
+    /********* Timeline Zoom Overlay *********/
+    const timeItems=document.querySelectorAll('.time-item');
+    const overlay=document.getElementById('overlay');
+    const overlayContent=document.getElementById('overlayContent');
+    const closeBtn=document.getElementById('closeBtn');
+
+    timeItems.forEach(item=>{
+      item.classList.add('clickable');
+      item.addEventListener('click',()=>{
+        const title=item.querySelector('h4').innerHTML;
+        const message=item.querySelector('p').innerHTML;
+        overlayContent.innerHTML=`<h2>${title}</h2><p>${message}</p>`;
+        overlay.classList.add('active');
+      });
+    });
+
+    closeBtn.addEventListener('click',()=>overlay.classList.remove('active'));
+    overlay.addEventListener('click',e=>{ if(e.target===overlay) overlay.classList.remove('active'); });
+  </script>
+</body>
+</html>
